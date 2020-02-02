@@ -286,7 +286,7 @@ public class RoBoot : MonoBehaviour
             m_BodyPart = m_Upper;
             if (!m_Upper.activeInHierarchy)
             {
-                m_Transform.position += new Vector3(0.0f, 2.0f, 0.0f);
+                m_Transform.position += new Vector3(0.0f, 3.0f, 0.0f);
                 if (!m_Lower.activeInHierarchy)
                 {
                     //Debug.Log("fuck");
