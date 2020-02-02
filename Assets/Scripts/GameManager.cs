@@ -39,6 +39,19 @@ public class RoBootCondition
     public Body body;
     public Leg leg;
 
+    public RoBootCondition()
+    {
+        hand = Hand.None;
+        body = Body.None;
+        leg = Leg.None;
+    }
+
+    public RoBootCondition(Hand tempHand, Body tempBody, Leg tempLeg)
+    {
+        hand = tempHand;
+        body = tempBody;
+        leg = tempLeg;
+    }
     public bool IsEqual(RoBootCondition temp)
     {
         if (hand == temp.hand && body == temp.body && leg == temp.leg)

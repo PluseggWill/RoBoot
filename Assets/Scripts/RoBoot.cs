@@ -52,6 +52,7 @@ public class RoBoot : MonoBehaviour
         }
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, m_GroundRadius, m_GroundLayer);
+        
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i].gameObject != gameObject)
@@ -94,8 +95,64 @@ public class RoBoot : MonoBehaviour
         transform.localScale = scale;
     }
 
+    public void PickItem (RoBootCondition item)
+    {
+        // Called when picking up item
+        RoBootCondition temp = new RoBootCondition();
+        temp.Update(GameManager.instance.condition);
+        
+        temp.hand = item.hand == Hand.None ? temp.hand : item.hand;
+        temp.body = item.body == Body.None ? temp.body : item.body;
+        temp.leg = item.leg == Leg.None ? temp.leg : item.leg;
+
+        UpdateCollider(temp);
+        UpdateParts(temp);
+    }
+
+    public void UpdateParts(RoBootCondition condition)
+    {
+        // Load the sprite of body parts
+        switch (condition.hand)
+        {
+            case Hand.None:
+                break;
+            case Hand.Socket:
+                break;
+            case Hand.Drill:
+                break;
+            case Hand.Goal:
+                break;
+        }
+
+        switch (condition.body)
+        {
+            case Body.None:
+                break;
+            case Body.Light:
+                break;
+            case Body.Hanger:
+                break;
+            case Body.Goal:
+                break;
+        }
+
+        switch (condition.leg)
+        {
+            case Leg.None:
+                break;
+            case Leg.Magnet:
+                break;
+            case Leg.Spring:
+                break;
+            case Leg.Goal:
+                break;
+        }
+
+    }
+
     public void UpdateCollider(RoBootCondition condition)
     {
+        // Update different level of collider
         if (GameManager.instance.condition.IsEqual(condition))
         {
             Debug.Log("Same");
