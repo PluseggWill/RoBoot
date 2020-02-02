@@ -18,11 +18,15 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
         else
+        {
             Destroy(transform.gameObject);
+        }
+        UpdateCondition(new RoBootCondition(){hand = Hand.None, body = Body.None, leg = Leg.None});
+    }
 
-        condition.hand = Hand.None;
-        condition.body = Body.None;
-        condition.leg = Leg.None;
+    public void UpdateCondition(RoBootCondition update)
+    {
+        condition = update;
     }
 }
 
@@ -34,4 +38,18 @@ public class RoBootCondition
     public Hand hand;
     public Body body;
     public Leg leg;
+
+    public bool IsEqual(RoBootCondition temp)
+    {
+        if (hand == temp.hand && body == temp.body && leg == temp.leg)
+            return true;
+        return false;
+    }
+
+    public void Update(RoBootCondition temp)
+    {
+        hand = temp.hand;
+        body = temp.body;
+        leg = temp.leg;
+    }
 }

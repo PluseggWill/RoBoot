@@ -18,6 +18,20 @@ public class RoBootController : MonoBehaviour
         {
             m_Jump = Input.GetButtonDown("Jump");
         }
+
+        // Debug Code
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            m_RoBoot.UpdateCollider(new RoBootCondition(){body = Body.None, leg = Leg.None});
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            m_RoBoot.UpdateCollider(new RoBootCondition(){body = Body.None, leg = Leg.Goal});
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            m_RoBoot.UpdateCollider(new RoBootCondition(){body = Body.Goal, leg = Leg.Goal});
+        }
     }
 
     private void FixedUpdate()

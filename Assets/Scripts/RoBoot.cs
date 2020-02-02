@@ -10,29 +10,29 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_AirControl = true;
     [SerializeField] private bool m_UseGravity = true;
-    public bool m_Leg = false;
-    public bool m_Body = false;
 
+    private Transform m_Transform;
     private Transform m_GroundCheck;
-    const float m_GroundRadius = .02f;
-    private Transform m_CellingCheck;
-    const float m_CellingRadius = 0.01f;
+    const float m_GroundRadius = .2f;
     private Rigidbody2D m_Rigidbody;
     private GameObject m_BodyPart;
+    private GameObject m_Upper;
     private GameObject m_LegPart;
+    private GameObject m_Lower;
     private bool m_FacingRight = true;
-    private bool m_Grounded;
+    [SerializeField]private bool m_Grounded;
     private bool m_Jumpable;
 
     private void Awake() 
     {
         m_GroundCheck = transform.Find("GroundCheck");
-        m_CellingCheck = transform.Find("CellingCheck");
         m_Rigidbody = GetComponent<Rigidbody2D>();
-        m_BodyPart = GameObject.Find("Body");
-        m_LegPart = GameObject.Find("Leg");
-        m_BodyPart.SetActive(false);
-        m_LegPart.SetActive(false);
+        m_Transform = GetComponent<Transform>();
+        m_Upper = GameObject.Find("Upper");
+        m_Lower = GameObject.Find("Lower");
+        m_Upper.SetActive(false);
+        m_Lower.SetActive(false);
+        m_GroundLayer = LayerMask.GetMask("Ground");
     }
 
     private void FixedUpdate() 
@@ -61,20 +61,6 @@ public class RoBoot : MonoBehaviour
         }
 
         // Test Code
-        if (m_Leg)
-        {
-            GameManager.instance.condition.leg = Leg.Goal;
-            if (m_Body)
-            {
-                GameManager.instance.condition.body = Body.Goal;
-            }
-        }
-        else
-        {
-            GameManager.instance.condition.body = Body.None;
-            GameManager.instance.condition.leg = Leg.None;
-        }
-        UpdateCollider();
     }
 
     public void Move(float move, bool jump)
@@ -108,34 +94,59 @@ public class RoBoot : MonoBehaviour
         transform.localScale = scale;
     }
 
-    private void UpdateCollider()
+    public void UpdateCollider(RoBootCondition condition)
     {
-        if (GameManager.instance.condition.leg != Leg.None)
+        if (GameManager.instance.condition.IsEqual(condition))
         {
-            if (GameManager.instance.condition.body != Body.None)
+            Debug.Log("Same");
+            return;
+        }
+            
+        
+        GameManager.instance.condition.Update(condition);
+        if (condition.leg == Leg.None && condition.body == Body.None)
+        {
+            m_Upper.SetActive(false);
+            m_Lower.SetActive(false);
+            m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 0.47f, 0.0f);
+        }
+        else if (condition.leg != Leg.None && condition.body == Body.None)
+        {
+            m_LegPart = GameObject.Find("Upper");
+            if (!m_Upper.activeInHierarchy)
             {
-                // Only Leg, No Body
-                m_BodyPart.SetActive(false);
-                m_LegPart.SetActive(true);
-                m_LegPart.transform.position = new Vector3(0f, -1f, 0f);
-                m_GroundCheck.position = new Vector3(0f, -1.47f, 0f);
-                GetComponent<Transform>().position += new Vector3(0,1,0);
+                m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
             }
-            else
+            m_Upper.SetActive(true);
+            m_Lower.SetActive(false);
+            m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 1.47f, 0.0f);
+        }
+        else if (condition.leg != Leg.None && condition.body != Body.None)
+        {
+            m_LegPart = GameObject.Find("Lower");
+            m_BodyPart = GameObject.Find("Upper");
+            if (!m_Upper.activeInHierarchy)
             {
-                // Both
-                m_BodyPart.SetActive(true);
-                m_BodyPart.transform.position = new Vector3(0f, -1f, 0f);
-                m_LegPart.SetActive(true);
-                m_LegPart.transform.position = new Vector3(0f, -2.0f, 0f);
-                m_GroundCheck.position = new Vector3(0f, -2.47f, 0f);
-                GetComponent<Transform>().position += new Vector3(0,2,0);
+                m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
+                if (!m_Lower.activeInHierarchy)
+                {
+                    m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
+                }
             }
+            m_Upper.SetActive(true);
+            m_Lower.SetActive(true);
+            m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 2.47f, 0.0f);
         }
         else
         {
-            m_BodyPart.SetActive(false);
-            m_LegPart.SetActive(false);
+            m_BodyPart = GameObject.Find("Upper");
+            if (!m_Upper.activeInHierarchy)
+            {
+                m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
+            }
+            m_Upper.SetActive(true);
+            m_Lower.SetActive(false);
+            m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 1.47f, 0.0f);
         }
     }
 }
