@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.Experimental.Rendering.LWRP;
+
 public class RoBoot : MonoBehaviour
 {
     [SerializeField] private float m_Speed = 10f;
@@ -12,6 +14,7 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private bool m_UseGravity = true;
     public bool m_Leg = false;
     public bool m_Body = false;
+    public Light2D playerLight;
 
     private Transform m_GroundCheck;
     const float m_GroundRadius = .02f;
@@ -35,9 +38,11 @@ public class RoBoot : MonoBehaviour
         m_LegPart.SetActive(false);
     }
 
-    private void FixedUpdate() 
+    void FixedUpdate() 
     {
+        PlayerLight();
         m_Grounded = false;
+   
 
         if (m_UseGravity)
         {
@@ -63,6 +68,7 @@ public class RoBoot : MonoBehaviour
         // Test Code
         if (m_Leg)
         {
+    
             GameManager.instance.condition.leg = Leg.Goal;
             if (m_Body)
             {
@@ -71,10 +77,15 @@ public class RoBoot : MonoBehaviour
         }
         else
         {
+           
             GameManager.instance.condition.body = Body.None;
             GameManager.instance.condition.leg = Leg.None;
         }
+      
         UpdateCollider();
+       
+
+       
     }
 
     public void Move(float move, bool jump)
@@ -110,6 +121,7 @@ public class RoBoot : MonoBehaviour
 
     private void UpdateCollider()
     {
+        
         if (GameManager.instance.condition.leg != Leg.None)
         {
             if (GameManager.instance.condition.body != Body.None)
@@ -138,6 +150,20 @@ public class RoBoot : MonoBehaviour
             m_LegPart.SetActive(false);
         }
     }
+    private void PlayerLight()
+    {
+        Debug.Log("light"+playerLight.intensity);
+        if (GameManager.instance.condition.body == Body.Light)
+        {
+            playerLight.intensity = 1F;
+        }
+        else
+        {
+            playerLight.intensity = 0F;
+        }
+        Debug.Log("light" + playerLight.intensity);
+    }
+
 }
 
 

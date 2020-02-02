@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public RoBootCondition condition;
+    
+  
 
 
 
