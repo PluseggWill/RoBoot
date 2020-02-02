@@ -5,13 +5,16 @@ using UnityEngine;
 public class DoorTrigger : MonoBehaviour
 {
     public GameObject door;
-    public bool isOneTime = true;
-    public float upDistance;
-    public float buttonDownDistance;
-    public float openSpeed = 0.05f;
-    public float closeSpeed = 0.05f;
-    public float pressSpeed = 0.1f;
-    public float upSpeed = 0.1f;
+    //public bool isOneTime = true;
+   public float upDistance;
+    //public float buttonDownDistance;
+   // public float openSpeed = 0.05f;
+   // public float closeSpeed = 0.05f;
+    //public float pressSpeed = 0.1f;
+   // public float upSpeed = 0.1f;
+
+    public float smoothTime = 0.3F;
+    public Vector3 velocity = Vector3.zero;
 
     public bool isTriggered;
     private Vector3 initialPosition;
@@ -22,8 +25,7 @@ public class DoorTrigger : MonoBehaviour
     {
         initialPosition = door.transform.position;
         targetPosition = door.transform.position + new Vector3(0, upDistance, 0);
-        initialButtonPosition = transform.position;
-        targetButtonPosition = transform.position - new Vector3(0, buttonDownDistance, 0);
+        
         isTriggered = false;
     }
 
@@ -33,15 +35,17 @@ public class DoorTrigger : MonoBehaviour
         
         if (isTriggered)
         {
-           
-            door.transform.position = Vector3.Lerp(door.transform.position, targetPosition, openSpeed);
-            transform.position = Vector3.Lerp(transform.position, targetButtonPosition, pressSpeed);
+
+            door.transform.position = Vector3.SmoothDamp(door.transform.position, targetPosition, ref velocity, smoothTime);
+            //door.transform.position = Vector3.Lerp(door.transform.position, targetPosition, openSpeed);
+            //transform.position = Vector3.Lerp(transform.position, targetButtonPosition, pressSpeed);
+
         }
-        if (!isTriggered && !isOneTime)
+       /* if (!isTriggered && !isOneTime)
         {
             door.transform.position = Vector3.Lerp(door.transform.position, initialPosition, closeSpeed);
             transform.position = Vector3.Lerp(transform.position, initialButtonPosition, upSpeed);
-        }
+        }*/
     }
 
     private void OnTriggerExit2D(Collider2D other) {

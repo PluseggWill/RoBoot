@@ -139,13 +139,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 570187764}
-  isOneTime: 1
   upDistance: 10
-  buttonDownDistance: 0
-  openSpeed: 0.06
-  closeSpeed: 0.05
-  pressSpeed: 0.1
-  upSpeed: 0.5
+  smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
   isTriggered: 0
 --- !u!65 &11736031
 BoxCollider:
@@ -253,13 +249,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 572236674}
-  isOneTime: 1
   upDistance: 0
-  buttonDownDistance: 0
-  openSpeed: 0.05
-  closeSpeed: 0.05
-  pressSpeed: 0.1
-  upSpeed: 0.1
+  smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
   isTriggered: 0
 --- !u!1 &197597523
 GameObject:
@@ -316,10 +308,10 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 823
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -339,7 +331,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 197597523}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.09, y: 0.36, z: -10}
+  m_LocalPosition: {x: 0.4, y: -0.7, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1111,13 +1103,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 2119453620}
-  isOneTime: 1
   upDistance: 3
-  buttonDownDistance: 0
-  openSpeed: 0.05
-  closeSpeed: 0.05
-  pressSpeed: 0.1
-  upSpeed: 0.1
+  smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
   isTriggered: 0
 --- !u!65 &731768183
 BoxCollider:
@@ -1332,27 +1320,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 1893504874}
-  isOneTime: 1
   upDistance: 10
-  buttonDownDistance: 0
-  openSpeed: 0.06
-  closeSpeed: 0.05
-  pressSpeed: 0.1
-  upSpeed: 0.5
+  smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
   isTriggered: 0
---- !u!65 &880489411
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880489409}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.348281, y: 2.365715, z: 0}
-  m_Center: {x: 0.072939396, y: 0.29237175, z: 0}
 --- !u!1 &908706039 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1220736101314645940, guid: 2a2b9952ad9473644a0699b55b93e9d7,
@@ -1372,13 +1343,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 877636233}
-  isOneTime: 1
   upDistance: 10
-  buttonDownDistance: 0
-  openSpeed: 0.06
-  closeSpeed: 0.05
-  pressSpeed: 0.1
-  upSpeed: 0.1
+  smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
   isTriggered: 0
 --- !u!65 &908706041
 BoxCollider:
@@ -1578,12 +1545,12 @@ PrefabInstance:
     - target: {fileID: 6936841883736966820, guid: fb10ed8709a5be1469d99acb202b9920,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.39
+      value: -0.6700001
       objectReference: {fileID: 0}
     - target: {fileID: 6936841883736966820, guid: fb10ed8709a5be1469d99acb202b9920,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.15
+      value: 0.34000015
       objectReference: {fileID: 0}
     - target: {fileID: 6936841883736966828, guid: fb10ed8709a5be1469d99acb202b9920,
         type: 3}
@@ -2423,13 +2390,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 2119453620}
-  isOneTime: 1
   upDistance: 3
-  buttonDownDistance: 0
-  openSpeed: 0.05
-  closeSpeed: 0.05
-  pressSpeed: 0.1
-  upSpeed: 0.1
+  smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
   isTriggered: 0
 --- !u!65 &1589114417
 BoxCollider:
@@ -2538,7 +2501,7 @@ PrefabInstance:
     - target: {fileID: 1885139093510294453, guid: 2a2b9952ad9473644a0699b55b93e9d7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 61.78
+      value: 61.29
       objectReference: {fileID: 0}
     - target: {fileID: 1885139093510294453, guid: 2a2b9952ad9473644a0699b55b93e9d7,
         type: 3}
@@ -2647,13 +2610,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   door: {fileID: 771817238}
-  isOneTime: 1
   upDistance: 3
-  buttonDownDistance: 0
-  openSpeed: 0.05
-  closeSpeed: 0.05
-  pressSpeed: 0.1
-  upSpeed: 0.1
+  smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
   isTriggered: 0
 --- !u!65 &1686166770
 BoxCollider:
