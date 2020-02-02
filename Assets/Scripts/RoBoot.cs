@@ -274,7 +274,7 @@ public class RoBoot : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (false) //判断手是不是钻头
+        if (GameManager.instance.condition.hand.Equals("Drill")) //判断手是不是钻头
         {
             Vector3 hitPosition = Vector3.zero;
             if (tilemap != null && tilemapGameObject == collision.gameObject)
