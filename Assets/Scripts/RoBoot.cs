@@ -7,7 +7,7 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private float m_Speed = 10f;
     [SerializeField] private float m_JumpForce = 400f;
     [SerializeField] private LayerMask m_GroundLayer;
-    [SerializeField] private RobotCondition m_RobotCondtion;
+    //[SerializeField] private RobotCondition m_RobotCondtion;
     [SerializeField] private bool m_AirControl = true;
     [SerializeField] private bool m_UseGravity = true;
 
@@ -78,4 +78,4 @@ public class RoBoot : MonoBehaviour
     }
 }
 
-public enum RobotCondition{ Core, Leg, Full};
+
