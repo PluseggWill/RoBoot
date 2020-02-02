@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     }
 }
 
-public enum Hand {None, Drill, Socket, Goal};
+public enum Hand {None, Drill, Plug, Goal};
 public enum Body {None, Light, Hanger, Goal};
 public enum Leg {None, Spring, Magnet, Goal};
 public class RoBootCondition

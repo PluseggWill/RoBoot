@@ -112,41 +112,75 @@ public class RoBoot : MonoBehaviour
     public void UpdateParts(RoBootCondition condition)
     {
         // Load the sprite of body parts
-        switch (condition.hand)
-        {
-            case Hand.None:
-                break;
-            case Hand.Socket:
-                break;
-            case Hand.Drill:
-                break;
-            case Hand.Goal:
-                break;
-        }
+        string bodyPath = "";
+        string legPath = "";
+        string handPath = "";
 
-        switch (condition.body)
+        if (condition.hand != Hand.None)
         {
-            case Body.None:
-                break;
-            case Body.Light:
-                break;
-            case Body.Hanger:
-                break;
-            case Body.Goal:
-                break;
+            switch (condition.hand)
+            {
+                case Hand.Plug:
+                    handPath = "Sprites/HandPlug";
+                    break;
+                case Hand.Drill:
+                    handPath = "Sprites/HandDrill";
+                    break;
+                case Hand.Goal:
+                    handPath = "Sprites/HandGoal";
+                    break;
+            }
         }
-
-        switch (condition.leg)
+        if (condition.body != Body.None)
         {
-            case Leg.None:
-                break;
-            case Leg.Magnet:
-                break;
-            case Leg.Spring:
-                break;
-            case Leg.Goal:
-                break;
+            switch (condition.body)
+            {
+                case Body.Light:
+                    bodyPath = "Sprites/BodyLight";
+                    break;
+                case Body.Hanger:
+                    bodyPath = "Sprites/BodyHanger";
+                    break;
+                case Body.Goal:
+                    bodyPath = "Sprites/BodyGoal";
+                    break;
+            }
         }
+        if (condition.leg != Leg.None)
+        {
+            switch (condition.leg)
+            {
+                case Leg.Magnet:
+                    legPath = "Sprites/LegMagnet";
+                    break;
+                case Leg.Spring:
+                    legPath = "Sprites/LegSpring";
+                    break;
+                case Leg.Goal:
+                    legPath = "Sprites/LegGoal";
+                    break;
+            }
+        }
+        //Debug.Log("The Path is: " + tempPath);
+        if (m_BodyPart != null)
+        {
+            m_BodyPart.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(bodyPath);
+            Debug.Log("The BodyPath is: " + bodyPath);
+        }
+        else
+        {
+            Debug.Log("Body part is Null!");
+        }
+        if (m_LegPart != null)
+        {
+            m_LegPart.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(legPath);
+            Debug.Log("The LegPath is: " + legPath);
+        }
+        else
+        {
+            Debug.Log("Leg part is Null!");
+        }
+        
 
     }
 
@@ -155,7 +189,7 @@ public class RoBoot : MonoBehaviour
         // Update different level of collider
         if (GameManager.instance.condition.IsEqual(condition))
         {
-            Debug.Log("Same");
+            //Debug.Log("Same");
             return;
         }
             
@@ -163,13 +197,17 @@ public class RoBoot : MonoBehaviour
         GameManager.instance.condition.Update(condition);
         if (condition.leg == Leg.None && condition.body == Body.None)
         {
+            m_LegPart = null;
+            m_BodyPart = null;
             m_Upper.SetActive(false);
             m_Lower.SetActive(false);
             m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 0.47f, 0.0f);
         }
         else if (condition.leg != Leg.None && condition.body == Body.None)
         {
-            m_LegPart = GameObject.Find("Upper");
+            //m_LegPart = GameObject.Find("Upper");
+            m_LegPart = m_Upper;
+            m_BodyPart = null;
             if (!m_Upper.activeInHierarchy)
             {
                 m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
@@ -180,8 +218,8 @@ public class RoBoot : MonoBehaviour
         }
         else if (condition.leg != Leg.None && condition.body != Body.None)
         {
-            m_LegPart = GameObject.Find("Lower");
-            m_BodyPart = GameObject.Find("Upper");
+            m_LegPart = m_Lower;
+            m_BodyPart = m_Upper;
             if (!m_Upper.activeInHierarchy)
             {
                 m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
@@ -196,7 +234,8 @@ public class RoBoot : MonoBehaviour
         }
         else
         {
-            m_BodyPart = GameObject.Find("Upper");
+            m_BodyPart = m_Upper;
+            m_LegPart = null;
             if (!m_Upper.activeInHierarchy)
             {
                 m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
