@@ -5,11 +5,12 @@ using UnityEngine.Experimental.Rendering.LWRP;
 
 public class PlayerLight : MonoBehaviour
 {
-    public Light2D playerLight;
+    public GameObject playerLightGameObject;
+    Light2D playerLight;
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerLight = playerLightGameObject.GetComponent<Light2D>();
     }
 
     // Update is called once per frame
