@@ -5,6 +5,9 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public RoBootCondition item;
+    public float radian = 0f;
+    public float perRadian = 0.1f;
+    public float radius = 0.005f;
     public Hand hand;
     public Body body;
     public Leg leg;
@@ -18,6 +21,11 @@ public class Item : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other) {
         //Debug.Log("Staying" + other.gameObject.name);
+    }
+
+    private void FixedUpdate() {
+        radian += perRadian;
+        itemSprite.transform.position += new Vector3(0, Mathf.Cos(radian) * radius, 0);
     }
 
     public void ExchangeItem(RoBootCondition temp)
