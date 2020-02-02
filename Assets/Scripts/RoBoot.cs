@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.LWRP;
+using UnityEngine.Tilemaps;
 
 public class RoBoot : MonoBehaviour
 {
@@ -10,6 +12,10 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_AirControl = true;
     [SerializeField] private bool m_UseGravity = true;
+
+    public GameObject tilemapGameObject;
+    public Light2D playerLight;
+    Tilemap tilemap;
 
     private Transform m_Transform;
     private Transform m_GroundCheck;
@@ -23,6 +29,13 @@ public class RoBoot : MonoBehaviour
     [SerializeField]private bool m_Grounded;
     private bool m_Jumpable;
 
+    private void Start()
+    {
+        if (tilemapGameObject != null)
+        {
+            tilemap = tilemapGameObject.GetComponent<Tilemap>();
+        }
+    }
     private void Awake() 
     {
         m_GroundCheck = transform.Find("GroundCheck");
@@ -37,6 +50,7 @@ public class RoBoot : MonoBehaviour
 
     private void FixedUpdate() 
     {
+        PlayerLight();
         m_Grounded = false;
 
         if (m_UseGravity)
@@ -155,7 +169,7 @@ public class RoBoot : MonoBehaviour
                     legPath = "Sprites/LegMagnet";
                     break;
                 case Leg.Spring:
-                    legPath = "Sprites/LegSpring";
+                    legPath = "Sprites/LegSpring_Walk";
                     break;
                 case Leg.Goal:
                     legPath = "Sprites/LegGoal";
@@ -246,6 +260,37 @@ public class RoBoot : MonoBehaviour
             m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 1.47f, 0.0f);
         }
     }
+
+    public void PlayerLight()
+    {
+        if (true)//判断手是不是灯
+        {
+            playerLight.intensity = 0f;
+        }
+        else
+        {
+            playerLight.intensity = 1f;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (false) //判断手是不是钻头
+        {
+            Vector3 hitPosition = Vector3.zero;
+            if (tilemap != null && tilemapGameObject == collision.gameObject)
+            {
+                foreach (ContactPoint2D hit in collision.contacts)
+                {
+                    hitPosition.x = hit.point.x - 0.01f * hit.normal.x;
+                    hitPosition.y = hit.point.y - 0.01f * hit.normal.y;
+                    tilemap.SetTile(tilemap.WorldToCell(hitPosition), null);
+                }
+            }
+        }
+    }
 }
+
+    
 
 
