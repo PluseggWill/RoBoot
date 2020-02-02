@@ -26,6 +26,7 @@ public class RoBoot : MonoBehaviour
     public GameObject m_Hand2;
     private bool m_FacingRight = true;
     public bool m_Magnet = false;
+    public bool m_IsMag = false;
     private float m_MagCoe;
     [SerializeField]private bool m_Grounded;
     private float m_JumpableCoe = 0.6f;
@@ -47,7 +48,7 @@ public class RoBoot : MonoBehaviour
     private void FixedUpdate() 
     {
         m_Grounded = false;
-        m_MagCoe = m_Magnet ? -1.5f : 1;
+        m_MagCoe = m_Magnet ? -1.3f : 1;
         //Debug.Log("MagnetCoe:  " + m_MagCoe);
 
         if (m_Rigidbody.velocity.y * m_MagCoe < 0)
@@ -142,6 +143,15 @@ public class RoBoot : MonoBehaviour
         else
         {
             m_JumpableCoe = 0.6f;
+        }
+
+        if (condition.leg == Leg.Magnet)
+        {
+            m_IsMag = true;
+        }
+        else
+        {
+            m_IsMag = false;
         }
         UpdateCollider(condition);
         UpdateParts(condition);
@@ -276,10 +286,11 @@ public class RoBoot : MonoBehaviour
             m_BodyPart = m_Upper;
             if (!m_Upper.activeInHierarchy)
             {
-                m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
+                m_Transform.position += new Vector3(0.0f, 2.0f, 0.0f);
                 if (!m_Lower.activeInHierarchy)
                 {
-                    m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
+                    //Debug.Log("fuck");
+                    //m_Transform.position += new Vector3(0.0f, 5.0f, 0.0f);
                 }
             }
             m_Upper.SetActive(true);
