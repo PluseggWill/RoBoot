@@ -121,6 +121,7 @@ public class RoBoot : MonoBehaviour
 
         UpdateCollider(temp);
         UpdateParts(temp);
+        GameManager.instance.UpdateAudio();
     }
 
     public void UpdateParts(RoBootCondition condition)

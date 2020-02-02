@@ -1,6 +1,12 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Prefab/Door.prefab.meta
 guid: 7ff58487c6e39604e970f2958b737624
 PrefabImporter:
+=======
+guid: c6a08df0dadd29d43a0224c3a46a4632
+folderAsset: yes
+DefaultImporter:
+>>>>>>> ab73132dbb7dbd3cc0385d43e9226962a0fe9a70:Assets/Resources/Animations.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

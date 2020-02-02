@@ -151,6 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48f8da1d32f11541ad2b76b562142df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radian: 0
+  perRadian: 0.1
+  radius: 0.005
   hand: 0
   body: 0
   leg: 0
