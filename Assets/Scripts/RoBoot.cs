@@ -203,8 +203,9 @@ public class RoBoot : MonoBehaviour
         
         if (m_Hand != null)
         {
-            m_Hand.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
             Debug.Log("The HandPath is: " + handPath);
+            m_Hand.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
+            //Debug.Log("The HandPath is: " + handPath);
         }
         else
         {
