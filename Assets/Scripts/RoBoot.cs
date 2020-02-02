@@ -14,7 +14,7 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private bool m_UseGravity = true;
 
     public GameObject tilemapGameObject;
-    public Light2D playerLight;
+
     Tilemap tilemap;
 
     private Transform m_Transform;
@@ -50,7 +50,7 @@ public class RoBoot : MonoBehaviour
 
     private void FixedUpdate() 
     {
-        PlayerLight();
+        
         m_Grounded = false;
 
         if (m_UseGravity)
@@ -261,21 +261,12 @@ public class RoBoot : MonoBehaviour
         }
     }
 
-    public void PlayerLight()
-    {
-        if (true)//判断手是不是灯
-        {
-            playerLight.intensity = 0f;
-        }
-        else
-        {
-            playerLight.intensity = 1f;
-        }
-    }
+
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (GameManager.instance.condition.hand.Equals("Drill")) //判断手是不是钻头
+        Debug.Log("111");
+        if (true||GameManager.instance.condition.hand.Equals("Drill")) //判断手是不是钻头
         {
             Vector3 hitPosition = Vector3.zero;
             if (tilemap != null && tilemapGameObject == collision.gameObject)
