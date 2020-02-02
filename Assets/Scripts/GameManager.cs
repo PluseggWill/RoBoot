@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public RoBootCondition condition;
     private Component[] audios;
+    public AudioSource[] SeAudios;
 
 
 
@@ -79,6 +80,19 @@ public class GameManager : MonoBehaviour
             }
             tempAudio.mute = true;
         }
+    }
+
+
+    public void PlaySe(int num)
+    {
+        SeAudios[num].mute = false;
+        SeAudios[num].Play();
+    }
+
+    public void StopSe(int num)
+    {
+        SeAudios[num].mute = true;
+        SeAudios[num].Stop();
     }
 }
 

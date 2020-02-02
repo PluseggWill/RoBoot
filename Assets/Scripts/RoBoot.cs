@@ -22,12 +22,13 @@ public class RoBoot : MonoBehaviour
     private GameObject m_Upper;
     private GameObject m_LegPart;
     private GameObject m_Lower;
-    private GameObject m_Hand;
+    public GameObject m_Hand1;
+    public GameObject m_Hand2;
     private bool m_FacingRight = true;
     public bool m_Magnet = false;
-    private int m_MagCoe;
+    private float m_MagCoe;
     [SerializeField]private bool m_Grounded;
-    private bool m_Jumpable = false;
+    private float m_JumpableCoe = 0.6f;
 
     private void Awake() 
     {
@@ -37,7 +38,7 @@ public class RoBoot : MonoBehaviour
         m_Transform = GetComponent<Transform>();
         m_Upper = GameObject.Find("Upper");
         m_Lower = GameObject.Find("Lower");
-        m_Hand = GameObject.Find("Hand");
+        Debug.Log(m_Hand1.name);
         m_Upper.SetActive(false);
         m_Lower.SetActive(false);
         m_GroundLayer = LayerMask.GetMask("Ground");
@@ -46,8 +47,8 @@ public class RoBoot : MonoBehaviour
     private void FixedUpdate() 
     {
         m_Grounded = false;
-        m_MagCoe = m_Magnet ? -1 : 1;
-        Debug.Log("MagnetCoe:  " + m_MagCoe);
+        m_MagCoe = m_Magnet ? -1.5f : 1;
+        //Debug.Log("MagnetCoe:  " + m_MagCoe);
 
         if (m_Rigidbody.velocity.y * m_MagCoe < 0)
         {
@@ -85,12 +86,28 @@ public class RoBoot : MonoBehaviour
             {
                 Flip();
             }
+            if (m_Grounded && (move * move) > 0.1f)
+            {
+                if (GameManager.instance.condition.leg == Leg.None)
+                {
+                    GameManager.instance.PlaySe(0);
+                }
+                else if (GameManager.instance.condition.leg == Leg.Goal || GameManager.instance.condition.leg == Leg.Magnet)
+                {
+                    GameManager.instance.PlaySe(3);
+                }
+            }
+            else{
+                GameManager.instance.StopSe(3);
+                GameManager.instance.StopSe(0);
+            }
         }
 
-        if (m_Grounded && jump && m_Jumpable)
+        if (m_Grounded && jump)
         {
+            GameManager.instance.PlaySe(2);
             m_Grounded = false;
-            m_Rigidbody.AddForce(new Vector2(0f, m_JumpForce * m_MagCoe));
+            m_Rigidbody.AddForce(new Vector2(0f, m_JumpForce * m_MagCoe * m_JumpableCoe));
         }
     }
 
@@ -120,11 +137,11 @@ public class RoBoot : MonoBehaviour
     {
         if (condition.leg == Leg.Spring)
         {
-            m_Jumpable = true;
+            m_JumpableCoe = 1.1f;
         }
         else
         {
-            m_Jumpable = false;
+            m_JumpableCoe = 0.6f;
         }
         UpdateCollider(condition);
         UpdateParts(condition);
@@ -187,27 +204,28 @@ public class RoBoot : MonoBehaviour
         if (m_BodyPart != null)
         {
             m_BodyPart.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(bodyPath);
-            Debug.Log("The BodyPath is: " + bodyPath);
+            //Debug.Log("The BodyPath is: " + bodyPath);
         }
         else
         {
-            Debug.Log("Body part is Null!");
+            //Debug.Log("Body part is Null!");
         }
 
         if (m_LegPart != null)
         {
             m_LegPart.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(legPath);
-            Debug.Log("The LegPath is: " + legPath);
+            //Debug.Log("The LegPath is: " + legPath);
         }
         else
         {
-            Debug.Log("Leg part is Null!");
+            //Debug.Log("Leg part is Null!");
         }
         
-        if (m_Hand != null)
+        if (m_Hand1 != null && m_Hand2 != null)
         {
             Debug.Log("The HandPath is: " + handPath);
-            m_Hand.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
+            m_Hand1.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
+            m_Hand2.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
             //Debug.Log("The HandPath is: " + handPath);
         }
         else
@@ -233,7 +251,8 @@ public class RoBoot : MonoBehaviour
             m_BodyPart = null;
             m_Upper.SetActive(false);
             m_Lower.SetActive(false);
-            m_Hand.transform.position = m_Transform.position;
+            m_Hand1.SetActive(true);
+            m_Hand2.SetActive(false);
             m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 0.47f, 0.0f);
         }
         else if (condition.leg != Leg.None && condition.body == Body.None)
@@ -247,7 +266,8 @@ public class RoBoot : MonoBehaviour
             }
             m_Upper.SetActive(true);
             m_Lower.SetActive(false);
-            m_Hand.transform.position = m_Upper.transform.position;
+            m_Hand1.SetActive(false);
+            m_Hand2.SetActive(true);
             m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 1.47f, 0.0f);
         }
         else if (condition.leg != Leg.None && condition.body != Body.None)
@@ -264,7 +284,8 @@ public class RoBoot : MonoBehaviour
             }
             m_Upper.SetActive(true);
             m_Lower.SetActive(true);
-            m_Hand.transform.position = m_Upper.transform.position;
+            m_Hand1.SetActive(false);
+            m_Hand2.SetActive(true);
             m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 2.47f, 0.0f);
         }
         else
@@ -277,7 +298,8 @@ public class RoBoot : MonoBehaviour
             }
             m_Upper.SetActive(true);
             m_Lower.SetActive(false);
-            m_Hand.transform.position = m_Upper.transform.position;
+            m_Hand1.SetActive(false);
+            m_Hand2.SetActive(true);
             m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 1.47f, 0.0f);
         }
     }
