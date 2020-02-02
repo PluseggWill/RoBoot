@@ -32,7 +32,7 @@ public class RoBootController : MonoBehaviour
             
         }
 
-        if (Input.GetKeyDown(KeyCode.F) && m_DoorTrigger != null)
+        if (Input.GetKeyDown(KeyCode.F) && m_DoorTrigger != null && GameManager.instance.condition.hand == Hand.Plug)
         {
             m_DoorTrigger.isTriggered = true;
         }
