@@ -482,7 +482,7 @@ PrefabInstance:
     - target: {fileID: 8256771057493934453, guid: 725eaa76efbfd5244baf44eaef6cb0b1,
         type: 3}
       propertyPath: hand
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8256771057493934453, guid: 725eaa76efbfd5244baf44eaef6cb0b1,
         type: 3}
@@ -492,7 +492,7 @@ PrefabInstance:
     - target: {fileID: 8256771057493934453, guid: 725eaa76efbfd5244baf44eaef6cb0b1,
         type: 3}
       propertyPath: leg
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8256771057493934454, guid: 725eaa76efbfd5244baf44eaef6cb0b1,
         type: 3}
@@ -589,7 +589,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 068ddb534601ead46bbd186015612f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Catched: 0
 --- !u!1001 &1885181287
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -793,6 +792,11 @@ PrefabInstance:
     - target: {fileID: 8256771057493934453, guid: 725eaa76efbfd5244baf44eaef6cb0b1,
         type: 3}
       propertyPath: leg
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256771057493934453, guid: 725eaa76efbfd5244baf44eaef6cb0b1,
+        type: 3}
+      propertyPath: hand
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8256771057493934454, guid: 725eaa76efbfd5244baf44eaef6cb0b1,
