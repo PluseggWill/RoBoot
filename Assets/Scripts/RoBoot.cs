@@ -168,7 +168,7 @@ public class RoBoot : MonoBehaviour
                     legPath = "Sprites/LegMagnet";
                     break;
                 case Leg.Spring:
-                    legPath = "Sprites/LegSpring_Walk";
+                    legPath = "Sprites/LegSpring";
                     break;
                 case Leg.Goal:
                     legPath = "Sprites/LegGoal";
