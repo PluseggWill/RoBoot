@@ -7,8 +7,6 @@ public class RoBootController : MonoBehaviour
 {
     private RoBoot m_RoBoot;
     private bool m_Jump = false;
-    private bool m_Pickable = false;
-    private bool m_Activable = false;
     private Item m_TargetItem;
     private DoorTrigger m_DoorTrigger;
     private void Awake()

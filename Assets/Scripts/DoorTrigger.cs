@@ -24,6 +24,7 @@ public class DoorTrigger : MonoBehaviour
         targetPosition = door.transform.position + new Vector3(0, upDistance, 0);
         initialButtonPosition = transform.position;
         targetButtonPosition = transform.position - new Vector3(0, buttonDownDistance, 0);
+        isTriggered = false;
     }
 
     // Update is called once per frame
