@@ -11,7 +11,9 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_AirControl = true;
     //[SerializeField] private bool m_UseGravity = true;
-
+    
+    public GameObject tilemapGameObject;
+    private Tilemap tilemap;
     public Transform m_Transform;
     private Transform m_GroundCheck;
     const float m_GroundRadius = .2f;
@@ -29,6 +31,7 @@ public class RoBoot : MonoBehaviour
 
     private void Awake() 
     {
+        tilemap = tilemapGameObject.GetComponent<Tilemap>();
         m_GroundCheck = transform.Find("GroundCheck");
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_Transform = GetComponent<Transform>();
@@ -276,6 +279,25 @@ public class RoBoot : MonoBehaviour
             m_Lower.SetActive(false);
             m_Hand.transform.position = m_Upper.transform.position;
             m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 1.47f, 0.0f);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (GameManager.instance.condition.hand.Equals("Drill")) //判断手是不是钻头
+        {
+            Debug.Log( tilemapGameObject == collision.gameObject);
+            Vector3 hitPosition = Vector3.zero;
+            if (tilemap != null && tilemapGameObject == collision.gameObject)
+            {
+                
+                foreach (ContactPoint2D hit in collision.contacts)
+                {
+                    hitPosition.x = hit.point.x - 0.01f * hit.normal.x;
+                    hitPosition.y = hit.point.y - 0.01f * hit.normal.y;
+                    tilemap.SetTile(tilemap.WorldToCell(hitPosition), null);
+                }
+            }
         }
     }
 }
