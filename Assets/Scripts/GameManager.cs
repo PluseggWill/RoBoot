@@ -7,11 +7,11 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public enum RobotCondition { Core, Leg, Full };//Roboot status
+    public RoBootCondition condition;
 
 
 
-    void start()
+    void Awake()
     {
         if (instance == null)
         {
@@ -19,5 +19,19 @@ public class GameManager : MonoBehaviour
         }
         else
             Destroy(transform.gameObject);
+
+        condition.hand = Hand.None;
+        condition.body = Body.None;
+        condition.leg = Leg.None;
     }
+}
+
+public enum Hand {None, Drill, Socket, Goal};
+public enum Body {None, Light, Hanger, Goal};
+public enum Leg {None, Spring, Magnet, Goal};
+public class RoBootCondition
+{
+    public Hand hand;
+    public Body body;
+    public Leg leg;
 }
