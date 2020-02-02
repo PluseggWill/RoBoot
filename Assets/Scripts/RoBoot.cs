@@ -10,12 +10,9 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private float m_DropRate = 3f;
     [SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_AirControl = true;
-    [SerializeField] private bool m_UseGravity = true;
+    //[SerializeField] private bool m_UseGravity = true;
 
-    public GameObject tilemapGameObject;
-    Tilemap tilemap;
-
-    private Transform m_Transform;
+    public Transform m_Transform;
     private Transform m_GroundCheck;
     const float m_GroundRadius = .2f;
     private Rigidbody2D m_Rigidbody;
@@ -25,16 +22,11 @@ public class RoBoot : MonoBehaviour
     private GameObject m_Lower;
     private GameObject m_Hand;
     private bool m_FacingRight = true;
+    public bool m_Magnet = false;
+    private int m_MagCoe;
     [SerializeField]private bool m_Grounded;
-    private bool m_Jumpable;
+    private bool m_Jumpable = false;
 
-    private void Start()
-    {
-        if (tilemapGameObject != null)
-        {
-            tilemap = tilemapGameObject.GetComponent<Tilemap>();
-        }
-    }
     private void Awake() 
     {
         m_GroundCheck = transform.Find("GroundCheck");
@@ -51,17 +43,16 @@ public class RoBoot : MonoBehaviour
     private void FixedUpdate() 
     {
         m_Grounded = false;
+        m_MagCoe = m_Magnet ? -1 : 1;
+        Debug.Log("MagnetCoe:  " + m_MagCoe);
 
-        if (m_UseGravity)
+        if (m_Rigidbody.velocity.y * m_MagCoe < 0)
         {
-            if (m_Rigidbody.velocity.y < 0)
-            {
-                m_Rigidbody.AddForce(Physics2D.gravity * m_DropRate);
-            }
-            else
-            {
-                m_Rigidbody.AddForce(Physics2D.gravity);
-            }
+            m_Rigidbody.AddForce(Physics2D.gravity * m_DropRate * m_MagCoe);
+        }
+        else
+        {
+            m_Rigidbody.AddForce(Physics2D.gravity * m_MagCoe);
         }
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, m_GroundRadius, m_GroundLayer);
@@ -83,20 +74,20 @@ public class RoBoot : MonoBehaviour
         {
             m_Rigidbody.velocity = new Vector2(move * m_Speed, m_Rigidbody.velocity.y);
 
-            if (move > 0 && !m_FacingRight)
+            if (move * m_MagCoe > 0 && !m_FacingRight)
             {
                 Flip();
             }
-            else if (move < 0 && m_FacingRight)
+            else if (move * m_MagCoe < 0 && m_FacingRight)
             {
                 Flip();
             }
         }
 
-        if (m_Grounded && jump)
+        if (m_Grounded && jump && m_Jumpable)
         {
             m_Grounded = false;
-            m_Rigidbody.AddForce(new Vector2(0f, m_JumpForce));
+            m_Rigidbody.AddForce(new Vector2(0f, m_JumpForce * m_MagCoe));
         }
     }
 
@@ -118,8 +109,22 @@ public class RoBoot : MonoBehaviour
         temp.body = item.body == Body.None ? temp.body : item.body;
         temp.leg = item.leg == Leg.None ? temp.leg : item.leg;
 
-        UpdateCollider(temp);
-        UpdateParts(temp);
+
+        UpdateRoBoot(temp);
+    }
+
+    public void UpdateRoBoot(RoBootCondition condition)
+    {
+        if (condition.leg == Leg.Spring)
+        {
+            m_Jumpable = true;
+        }
+        else
+        {
+            m_Jumpable = false;
+        }
+        UpdateCollider(condition);
+        UpdateParts(condition);
         GameManager.instance.UpdateAudio();
     }
 
