@@ -8,7 +8,9 @@ public class RoBootController : MonoBehaviour
     private RoBoot m_RoBoot;
     private bool m_Jump = false;
     private bool m_Pickable = false;
+    private bool m_Activable = false;
     private Item m_TargetItem;
+    private DoorTrigger m_DoorTrigger;
     private void Awake()
     {
         m_RoBoot = GetComponent<RoBoot>();
@@ -23,12 +25,18 @@ public class RoBootController : MonoBehaviour
         }
 
         // Pick Item
-        if (Input.GetKeyDown(KeyCode.F) && m_Pickable && m_TargetItem != null)
+        if (Input.GetKeyDown(KeyCode.F) && m_TargetItem != null)
         {
             RoBootCondition temp = new RoBootCondition();
             temp.Update(m_TargetItem.item);
             m_TargetItem.ExchangeItem(GameManager.instance.condition);
             m_RoBoot.PickItem(temp);
+            
+        }
+
+        if (Input.GetKeyDown(KeyCode.F) && m_DoorTrigger != null)
+        {
+            m_DoorTrigger.isTriggered = true;
         }
 
         // Debug Code
@@ -56,10 +64,13 @@ public class RoBootController : MonoBehaviour
     }
 
     private void OnTriggerStay2D(Collider2D other) {
+        // Picking Item
+        // Debug.Log("the Name is: " + other.name);
+
         m_TargetItem = other.gameObject.GetComponent<Item>();
-        if (m_TargetItem != null)
-        {
-            m_Pickable = true;
-        }
+
+        // Door Trigger
+        m_DoorTrigger = other.gameObject.GetComponent<DoorTrigger>();
+
     }
 }

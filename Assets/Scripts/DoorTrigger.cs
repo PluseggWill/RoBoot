@@ -13,7 +13,7 @@ public class DoorTrigger : MonoBehaviour
     public float pressSpeed = 0.1f;
     public float upSpeed = 0.1f;
 
-    private bool isTriggered;
+    public bool isTriggered;
     private Vector3 initialPosition;
     private Vector3 targetPosition;
     private Vector3 initialButtonPosition;
@@ -43,21 +43,7 @@ public class DoorTrigger : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        Debug.Log(collision);
-        if (collision.tag.Equals("Player"))
-        {
-            isTriggered = true;
-           
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.tag.Equals("Player"))
-        {
-            isTriggered = false;
-           
-        }
+    private void OnTriggerExit2D(Collider2D other) {
+        isTriggered = other.gameObject.GetComponent<RoBoot>() == null ? false : true;
     }
 }
