@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof (RoBoot))]
 public class RoBootController : MonoBehaviour
 {
+    public bool IsDebugMode;
     private RoBoot m_RoBoot;
     private bool m_Jump = false;
     private Item m_TargetItem;
@@ -25,10 +26,14 @@ public class RoBootController : MonoBehaviour
         // Pick Item
         if (Input.GetKeyDown(KeyCode.F) && m_TargetItem != null)
         {
-            RoBootCondition temp = new RoBootCondition();
-            temp.Update(m_TargetItem.item);
+            RoBootCondition temp = new RoBootCondition(m_TargetItem.hand, m_TargetItem.body, m_TargetItem.leg);
+            if (!m_TargetItem.isGoal)
+            {
+                temp.Update(m_TargetItem.item);
+            }
             m_TargetItem.ExchangeItem(GameManager.instance.condition);
-            m_RoBoot.PickItem(temp);
+            
+            m_RoBoot.PickItem(temp,m_TargetItem.isGoal);
             
         }
 
@@ -38,20 +43,21 @@ public class RoBootController : MonoBehaviour
         }
 
         // Debug Code
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (IsDebugMode)
         {
-            m_RoBoot.UpdateCollider(new RoBootCondition(){body = Body.None, leg = Leg.None});
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                m_RoBoot.UpdateRoBoot(new RoBootCondition(){body = Body.None, leg = Leg.None});
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                m_RoBoot.UpdateRoBoot(new RoBootCondition(){body = Body.None, leg = Leg.Goal});
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                m_RoBoot.UpdateRoBoot(new RoBootCondition(){body = Body.Goal, leg = Leg.Goal});
+            }
         }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            m_RoBoot.UpdateCollider(new RoBootCondition(){body = Body.None, leg = Leg.Goal});
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            m_RoBoot.UpdateCollider(new RoBootCondition(){body = Body.Goal, leg = Leg.Goal});
-        }
-
-
     }
 
     private void FixedUpdate()

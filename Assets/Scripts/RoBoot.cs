@@ -6,20 +6,15 @@ using UnityEngine.Experimental.Rendering.LWRP;
 
 public class RoBoot : MonoBehaviour
 {
-    [SerializeField] private float m_Speed = 10f;
-    [SerializeField] private float m_JumpForce = 1000f;
-    [SerializeField] private float m_DropRate = 3f;
     [SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_AirControl = true;
     //[SerializeField] private bool m_UseGravity = true;
-
     public GameObject playerLightGameObject;
     Light2D playerLight;
     public GameObject tilemapGameObject;
     private Tilemap tilemap;
     public Transform m_Transform;
     private Transform m_GroundCheck;
-    const float m_GroundRadius = .2f;
     private Rigidbody2D m_Rigidbody;
     private GameObject m_BodyPart;
     private GameObject m_Upper;
@@ -34,7 +29,17 @@ public class RoBoot : MonoBehaviour
     public bool m_IsLight = false;
     private float m_MagCoe;
     [SerializeField]private bool m_Grounded;
-    private float m_JumpableCoe = 0.6f;
+
+    #region PrivateParameters
+    const float m_GroundRadius = .2f;
+    private float m_JumpableCoe;
+    private float[] jumpCoe = {0.6f, 1.2f};
+    [SerializeField] private float m_Speed = 10f;
+    [SerializeField] private float m_JumpForce = 1000f;
+    [SerializeField] private float m_DropRate = 3f;
+    public GameObject[] JumpCheck;
+
+    #endregion
 
     private void Awake() 
     {
@@ -45,10 +50,10 @@ public class RoBoot : MonoBehaviour
         m_Transform = GetComponent<Transform>();
         m_Upper = GameObject.Find("Upper");
         m_Lower = GameObject.Find("Lower");
-        Debug.Log(m_Hand1.name);
         m_Upper.SetActive(false);
         m_Lower.SetActive(false);
         m_GroundLayer = LayerMask.GetMask("Ground");
+        m_JumpableCoe = jumpCoe[0];
     }
 
     private void FixedUpdate() 
@@ -132,29 +137,83 @@ public class RoBoot : MonoBehaviour
         transform.localScale = scale;
     }
 
-    public void PickItem (RoBootCondition item)
+    public void PickItem (RoBootCondition item, bool isGoal)
     {
         // Called when picking up item
         RoBootCondition temp = new RoBootCondition();
         temp.Update(GameManager.instance.condition);
+
+        if (isGoal)
+        {
+            if (temp.hand == Hand.Goal && item.hand == Hand.Goal)
+            {
+                temp.hand = Hand.None;
+            }
+            else if (temp.body == Body.Goal && item.body == Body.Goal)
+            {
+                temp.body = Body.None;
+            }
+            else if (temp.leg == Leg.Goal && item.leg == Leg.Goal)
+            {
+                temp.leg = Leg.None;
+            }
+            UpdateRoBoot(temp);
+            return;
+        }
+
+        if (temp.hand != Hand.None)
+        {
+            if (item.hand != Hand.None)
+            {
+                temp.hand = item.hand;
+            }
+        }
+        else
+        {
+            temp.hand = item.hand;
+        }
         
-        temp.hand = item.hand == Hand.None ? temp.hand : item.hand;
-        temp.body = item.body == Body.None ? temp.body : item.body;
-        temp.leg = item.leg == Leg.None ? temp.leg : item.leg;
+        if (temp.body != Body.None)
+        {
+            if (item.body != Body.None)
+            {
+                temp.body = item.body;
+            }
+        }
+        else
+        {
+            temp.body = item.body;
+        }
 
+        if (temp.leg != Leg.None)
+        {
+            if (item.leg != Leg.None)
+            {
+                temp.leg = item.leg;
+            }
+        }
+        else
+        {
+            temp.leg = item.leg;
+        }
 
+        //Debug.Log("Exchanged");
         UpdateRoBoot(temp);
     }
 
     public void UpdateRoBoot(RoBootCondition condition)
     {
+        Debug.Log("The Hand Now Is: " + condition.hand);
+        Debug.Log("The Body Now Is: " + condition.body);
+        Debug.Log("The Leg Now Is: " + condition.leg);
+
         if (condition.leg == Leg.Spring)
         {
-            m_JumpableCoe = 1.1f;
+            m_JumpableCoe = jumpCoe[1];
         }
         else
         {
-            m_JumpableCoe = 0.6f;
+            m_JumpableCoe = jumpCoe[0];
         }
 
         if (condition.leg == Leg.Magnet)
@@ -173,7 +232,7 @@ public class RoBoot : MonoBehaviour
         {
             m_IsDrill = false;
         }
-        if (condition.body ==Body.Light)
+        if (condition.body == Body.Light)
         {
             m_IsLight = true;
         }
@@ -181,8 +240,10 @@ public class RoBoot : MonoBehaviour
         {
             m_IsLight = false;
         }
+        
         UpdateCollider(condition);
         UpdateParts(condition);
+        GameManager.instance.UpdateCondition(condition);
         GameManager.instance.UpdateAudio();
     }
 
@@ -193,50 +254,49 @@ public class RoBoot : MonoBehaviour
         string legPath = "";
         string handPath = "";
 
-        if (condition.hand != Hand.None)
+        switch (condition.hand)
         {
-            switch (condition.hand)
-            {
-                case Hand.Plug:
-                    handPath = "Sprites/HandPlug";
-                    break;
-                case Hand.Drill:
-                    handPath = "Sprites/HandDrill";
-                    break;
-                case Hand.Goal:
-                    handPath = "Sprites/HandGoal";
-                    break;
-            }
+            case Hand.Plug:
+                handPath = "Sprites/HandPlug";
+                break;
+            case Hand.Drill:
+                handPath = "Sprites/HandDrill";
+                break;
+            case Hand.Goal:
+                handPath = "Sprites/HandGoal";
+                break;
+            default:
+                break;
         }
-        if (condition.body != Body.None)
+
+        switch (condition.body)
         {
-            switch (condition.body)
-            {
-                case Body.Light:
-                    bodyPath = "Sprites/BodyLight";
-                    break;
-                case Body.Hanger:
-                    bodyPath = "Sprites/BodyHanger";
-                    break;
-                case Body.Goal:
-                    bodyPath = "Sprites/BodyGoal";
-                    break;
-            }
+            case Body.Light:
+                bodyPath = "Sprites/BodyLight";
+                break;
+            case Body.Hanger:
+                bodyPath = "Sprites/BodyHanger";
+                break;
+            case Body.Goal:
+                bodyPath = "Sprites/BodyGoal";
+                break;
+            default:
+                break;
         }
-        if (condition.leg != Leg.None)
+
+        switch (condition.leg)
         {
-            switch (condition.leg)
-            {
-                case Leg.Magnet:
-                    legPath = "Sprites/LegMagnet";
-                    break;
-                case Leg.Spring:
-                    legPath = "Sprites/LegSpring";
-                    break;
-                case Leg.Goal:
-                    legPath = "Sprites/LegGoal";
-                    break;
-            }
+            case Leg.Magnet:
+                legPath = "Sprites/LegMagnet";
+                break;
+            case Leg.Spring:
+                legPath = "Sprites/LegSpring";
+                break;
+            case Leg.Goal:
+                legPath = "Sprites/LegGoal";
+                break;
+            default:
+                break;
         }
         //Debug.Log("The Path is: " + tempPath);
         if (m_BodyPart != null)
@@ -244,32 +304,26 @@ public class RoBoot : MonoBehaviour
             m_BodyPart.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(bodyPath);
             //Debug.Log("The BodyPath is: " + bodyPath);
         }
-        else
-        {
-            //Debug.Log("Body part is Null!");
-        }
 
         if (m_LegPart != null)
         {
             m_LegPart.GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>(legPath);
             //Debug.Log("The LegPath is: " + legPath);
         }
-        else
-        {
-            //Debug.Log("Leg part is Null!");
-        }
+
         
-        if (m_Hand1 != null && m_Hand2 != null)
+        if (m_Hand1 != null)
         {
-            Debug.Log("The HandPath is: " + handPath);
-            m_Hand1.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
-            m_Hand2.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
             //Debug.Log("The HandPath is: " + handPath);
+            m_Hand1.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
         }
-        else
+
+        if (m_Hand2 != null)
         {
-            Debug.Log("Hand part is Null!");
+            //Debug.Log("The HandPath is: " + handPath);
+            m_Hand2.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(handPath);
         }
+
     }
 
     public void UpdateCollider(RoBootCondition condition)
@@ -280,9 +334,7 @@ public class RoBoot : MonoBehaviour
             //Debug.Log("Same");
             return;
         }
-            
         
-        GameManager.instance.condition.Update(condition);
         if (condition.leg == Leg.None && condition.body == Body.None)
         {
             m_LegPart = null;
@@ -291,11 +343,11 @@ public class RoBoot : MonoBehaviour
             m_Lower.SetActive(false);
             m_Hand1.SetActive(true);
             m_Hand2.SetActive(false);
-            m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 0.47f, 0.0f);
+            m_GroundCheck.position = JumpCheck[0].transform.position;
         }
         else if (condition.leg != Leg.None && condition.body == Body.None)
         {
-            //m_LegPart = GameObject.Find("Upper");
+            // Only Leg
             m_LegPart = m_Upper;
             m_BodyPart = null;
             if (!m_Upper.activeInHierarchy)
@@ -306,29 +358,35 @@ public class RoBoot : MonoBehaviour
             m_Lower.SetActive(false);
             m_Hand1.SetActive(false);
             m_Hand2.SetActive(true);
-            m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 1.47f, 0.0f);
+            m_GroundCheck.position = JumpCheck[1].transform.position;
         }
         else if (condition.leg != Leg.None && condition.body != Body.None)
         {
+            // Both Leg and Body
             m_LegPart = m_Lower;
             m_BodyPart = m_Upper;
             if (!m_Upper.activeInHierarchy)
             {
-                m_Transform.position += new Vector3(0.0f, 3.0f, 0.0f);
+                m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
                 if (!m_Lower.activeInHierarchy)
                 {
                     //Debug.Log("fuck");
-                    //m_Transform.position += new Vector3(0.0f, 5.0f, 0.0f);
+                    m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
                 }
+            }
+            else
+            {
+                m_Transform.position += new Vector3(0.0f, 1.0f, 0.0f);
             }
             m_Upper.SetActive(true);
             m_Lower.SetActive(true);
             m_Hand1.SetActive(false);
             m_Hand2.SetActive(true);
-            m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 2.47f, 0.0f);
+            m_GroundCheck.position = JumpCheck[2].transform.position;
         }
         else
         {
+            // Only Body
             m_BodyPart = m_Upper;
             m_LegPart = null;
             if (!m_Upper.activeInHierarchy)
@@ -339,16 +397,16 @@ public class RoBoot : MonoBehaviour
             m_Lower.SetActive(false);
             m_Hand1.SetActive(false);
             m_Hand2.SetActive(true);
-            m_GroundCheck.position = m_Transform.position - new Vector3(0.0f, 1.47f, 0.0f);
+            m_GroundCheck.position = JumpCheck[1].transform.position;
         }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(m_IsDrill);
+        //Debug.Log(m_IsDrill);
         if (m_IsDrill) //判断手是不是钻头
         {
-            Debug.Log( tilemapGameObject == collision.gameObject);
+            //Debug.Log( tilemapGameObject == collision.gameObject);
             Vector3 hitPosition = Vector3.zero;
             if (tilemap != null && tilemapGameObject == collision.gameObject)
             {

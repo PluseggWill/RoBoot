@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public RoBootCondition condition;
+    [SerializeField] private Hand hand;
+    [SerializeField] private Body body;
+    [SerializeField] private Leg leg;
     private Component[] audios;
     public AudioSource[] SeAudios;
 
@@ -32,6 +35,9 @@ public class GameManager : MonoBehaviour
     public void UpdateCondition(RoBootCondition update)
     {
         condition = update;
+        hand = update.hand;
+        body = update.body;
+        leg = update.leg;
     }
 
     public void UpdateAudio()
@@ -43,17 +49,17 @@ public class GameManager : MonoBehaviour
         if (condition.hand != Hand.None)
         {
             handAudio += (int)condition.hand;
-            Debug.Log("handAudio: " + handAudio);
+            //Debug.Log("handAudio: " + handAudio);
         }
         if (condition.body != Body.None)
         {
             bodyAudio += (int)condition.body;
-            Debug.Log("bodyAudio: " + bodyAudio);
+            //Debug.Log("bodyAudio: " + bodyAudio);
         }
         if (condition.leg != Leg.None)
         {
             legAudio += (int)condition.leg;
-            Debug.Log("legAudio: " + legAudio);
+            //Debug.Log("legAudio: " + legAudio);
         }
 
         foreach (AudioSource tempAudio in audios)
