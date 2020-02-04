@@ -591,7 +591,7 @@ MonoBehaviour:
   m_Grounded: 0
   m_Speed: 10
   m_JumpForce: 1000
-  m_DropRate: 2
+  m_DropRate: 1.5
   JumpCheck:
   - {fileID: 676844666647425464}
   - {fileID: 4285689456521427604}
