@@ -16,6 +16,8 @@ public class RoBootController : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
         // Jump
         if (!m_Jump)
         {

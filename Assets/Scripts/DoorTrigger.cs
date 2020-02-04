@@ -15,12 +15,12 @@ public class DoorTrigger : MonoBehaviour
 
     public float smoothTime = 0.3F;
     public Vector3 velocity = Vector3.zero;
-
+    private float timer = 3f;    
     public bool isTriggered;
     private Vector3 initialPosition;
     private Vector3 targetPosition;
-    private Vector3 initialButtonPosition;
-    private Vector3 targetButtonPosition;
+    //private Vector3 initialButtonPosition;
+    //private Vector3 targetButtonPosition;
     void Start()
     {
         initialPosition = door.transform.position;
@@ -33,14 +33,26 @@ public class DoorTrigger : MonoBehaviour
     void Update()
     {
         
-        if (isTriggered)
+        if (isTriggered&&(door.transform.position.y-initialPosition.y)<upDistance)
         {
 
-            door.transform.position = Vector3.SmoothDamp(door.transform.position, targetPosition, ref velocity, smoothTime);
+            door.transform.Translate(Vector3.up * 5 * Time.deltaTime);            
+            //door.transform.position = Vector3.SmoothDamp(door.transform.position, targetPosition, ref velocity, smoothTime);
             //door.transform.position = Vector3.Lerp(door.transform.position, targetPosition, openSpeed);
             //transform.position = Vector3.Lerp(transform.position, targetButtonPosition, pressSpeed);
 
         }
+        if (door.transform.position.y >= initialPosition.y + upDistance)
+        {
+            timer = timer - Time.deltaTime;
+            if (timer <= 0)
+            {
+                door.transform.position = initialPosition;
+                timer = 3f;
+                isTriggered = false;
+            }
+        }
+        
        /* if (!isTriggered && !isOneTime)
         {
             door.transform.position = Vector3.Lerp(door.transform.position, initialPosition, closeSpeed);
@@ -49,6 +61,10 @@ public class DoorTrigger : MonoBehaviour
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        isTriggered = other.gameObject.GetComponent<RoBoot>() == null ? false : true;
+         if(!(other.gameObject.GetComponent<RoBoot>() == null))
+        {
+            isTriggered = true;
+        }
+        //isTriggered = other.gameObject.GetComponent<RoBoot>() == null ? false : true;
     }
 }
