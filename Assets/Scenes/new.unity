@@ -1690,6 +1690,12 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.348281, y: 2.365715, z: 0}
   m_Center: {x: 0.072939396, y: 0.29237175, z: 0}
+--- !u!1 &758301700 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3416441489162876793, guid: fb10ed8709a5be1469d99acb202b9920,
+    type: 3}
+  m_PrefabInstance: {fileID: 843595905}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &771817238 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3173758491880303412, guid: 7ff58487c6e39604e970f2958b737624,
@@ -1787,6 +1793,11 @@ PrefabInstance:
       propertyPath: m_Transform
       value: 
       objectReference: {fileID: 1625151681}
+    - target: {fileID: 437057938505426322, guid: fb10ed8709a5be1469d99acb202b9920,
+        type: 3}
+      propertyPath: playerLightGameObject
+      value: 
+      objectReference: {fileID: 758301700}
     - target: {fileID: 437057938505426328, guid: fb10ed8709a5be1469d99acb202b9920,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3336,6 +3347,20 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 843595905}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1625151682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1625151677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b8d00a8e9beffb43b8ee5753c3250c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLightGameObject: {fileID: 758301700}
+  playerLight: {fileID: 0}
 --- !u!1 &1686166768 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1220736101314645940, guid: 2a2b9952ad9473644a0699b55b93e9d7,
@@ -7326,7 +7351,7 @@ Tilemap:
   - first: {x: 15, y: 4, z: 0}
     second:
       m_TileIndex: 15
-      m_TileSpriteIndex: 16
+      m_TileSpriteIndex: 20
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -7840,9 +7865,8 @@ Tilemap:
   - m_RefCount: 2
     m_Data: {fileID: 3686651627561817242, guid: 8dc02bf6df43b19478dc999c32782e49,
       type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: -1636875620122297976, guid: 8dc02bf6df43b19478dc999c32782e49,
-      type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 53
     m_Data: {fileID: -3347518261855946938, guid: 33492c13e825bb34eb168fd616de3362,
       type: 3}
@@ -7852,8 +7876,9 @@ Tilemap:
   - m_RefCount: 11
     m_Data: {fileID: 1776047016046527233, guid: 33492c13e825bb34eb168fd616de3362,
       type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: -1636875620122297976, guid: 8dc02bf6df43b19478dc999c32782e49,
+      type: 3}
   - m_RefCount: 9
     m_Data: {fileID: 4473635428581822146, guid: 33492c13e825bb34eb168fd616de3362,
       type: 3}

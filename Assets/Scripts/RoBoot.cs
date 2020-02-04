@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.Experimental.Rendering.LWRP;
 
 public class RoBoot : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private bool m_AirControl = true;
     //[SerializeField] private bool m_UseGravity = true;
 
-
+    public GameObject playerLightGameObject;
+    Light2D playerLight;
     public GameObject tilemapGameObject;
     private Tilemap tilemap;
     public Transform m_Transform;
@@ -29,12 +31,14 @@ public class RoBoot : MonoBehaviour
     public bool m_Magnet = false;
     public bool m_IsMag = false;
     public bool m_IsDrill = false;
+    public bool m_IsLight = false;
     private float m_MagCoe;
     [SerializeField]private bool m_Grounded;
     private float m_JumpableCoe = 0.6f;
 
     private void Awake() 
     {
+        playerLight = playerLightGameObject.GetComponent<Light2D>();
         tilemap = tilemapGameObject.GetComponent<Tilemap>();
         m_GroundCheck = transform.Find("GroundCheck");
         m_Rigidbody = GetComponent<Rigidbody2D>();
@@ -49,6 +53,7 @@ public class RoBoot : MonoBehaviour
 
     private void FixedUpdate() 
     {
+        
         m_Grounded = false;
         m_MagCoe = m_Magnet ? -1.3f : 1;
         //Debug.Log("MagnetCoe:  " + m_MagCoe);
@@ -73,6 +78,11 @@ public class RoBoot : MonoBehaviour
         }
 
         // Test Code
+    }
+
+    private void Update()
+    {
+        LightIt();
     }
 
     public void Move(float move, bool jump)
@@ -162,6 +172,14 @@ public class RoBoot : MonoBehaviour
         else
         {
             m_IsDrill = false;
+        }
+        if (condition.body ==Body.Light)
+        {
+            m_IsLight = true;
+        }
+        else
+        {
+            m_IsLight = false;
         }
         UpdateCollider(condition);
         UpdateParts(condition);
@@ -342,6 +360,18 @@ public class RoBoot : MonoBehaviour
                     tilemap.SetTile(tilemap.WorldToCell(hitPosition), null);
                 }
             }
+        }
+    }
+
+    void LightIt()
+    {
+        if (m_IsLight)
+        {
+            playerLight.intensity = 2;
+        }
+        else
+        {
+            playerLight.intensity = 0;
         }
     }
 }
