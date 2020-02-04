@@ -11,7 +11,8 @@ public class RoBoot : MonoBehaviour
     [SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_AirControl = true;
     //[SerializeField] private bool m_UseGravity = true;
-    
+
+
     public GameObject tilemapGameObject;
     private Tilemap tilemap;
     public Transform m_Transform;
@@ -27,6 +28,7 @@ public class RoBoot : MonoBehaviour
     private bool m_FacingRight = true;
     public bool m_Magnet = false;
     public bool m_IsMag = false;
+    public bool m_IsDrill = false;
     private float m_MagCoe;
     [SerializeField]private bool m_Grounded;
     private float m_JumpableCoe = 0.6f;
@@ -152,6 +154,14 @@ public class RoBoot : MonoBehaviour
         else
         {
             m_IsMag = false;
+        }
+        if(condition.hand == Hand.Drill)
+        {
+            m_IsDrill = true;
+        }
+        else
+        {
+            m_IsDrill = false;
         }
         UpdateCollider(condition);
         UpdateParts(condition);
@@ -317,7 +327,8 @@ public class RoBoot : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (GameManager.instance.condition.hand.Equals("Drill")) //判断手是不是钻头
+        Debug.Log(m_IsDrill);
+        if (m_IsDrill) //判断手是不是钻头
         {
             Debug.Log( tilemapGameObject == collision.gameObject);
             Vector3 hitPosition = Vector3.zero;
