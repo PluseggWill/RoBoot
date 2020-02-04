@@ -19,8 +19,8 @@ public class DoorTrigger : MonoBehaviour
     public bool isTriggered;
     private Vector3 initialPosition;
     private Vector3 targetPosition;
-    private Vector3 initialButtonPosition;
-    private Vector3 targetButtonPosition;
+    //private Vector3 initialButtonPosition;
+    //private Vector3 targetButtonPosition;
     void Start()
     {
         initialPosition = door.transform.position;
@@ -33,10 +33,11 @@ public class DoorTrigger : MonoBehaviour
     void Update()
     {
         
-        if (isTriggered)
+        if (isTriggered&&(door.transform.position.y-initialPosition.y)<upDistance)
         {
 
-            door.transform.position = Vector3.SmoothDamp(door.transform.position, targetPosition, ref velocity, smoothTime);
+            door.transform.Translate(Vector3.up * 5 * Time.deltaTime);
+            //door.transform.position = Vector3.SmoothDamp(door.transform.position, targetPosition, ref velocity, smoothTime);
             //door.transform.position = Vector3.Lerp(door.transform.position, targetPosition, openSpeed);
             //transform.position = Vector3.Lerp(transform.position, targetButtonPosition, pressSpeed);
 
@@ -49,6 +50,10 @@ public class DoorTrigger : MonoBehaviour
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        isTriggered = other.gameObject.GetComponent<RoBoot>() == null ? false : true;
+         if(!(other.gameObject.GetComponent<RoBoot>() == null))
+        {
+            isTriggered = true;
+        }
+        //isTriggered = other.gameObject.GetComponent<RoBoot>() == null ? false : true;
     }
 }
