@@ -413,6 +413,7 @@ public class RoBoot : MonoBehaviour
                 
                 foreach (ContactPoint2D hit in collision.contacts)
                 {
+                    GameManager.instance.PlaySe(1);
                     hitPosition.x = hit.point.x - 0.01f * hit.normal.x;
                     hitPosition.y = hit.point.y - 0.01f * hit.normal.y;
                     tilemap.SetTile(tilemap.WorldToCell(hitPosition), null);
